@@ -6,6 +6,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {},
   mutations: {},
-  actions: {},
+  actions: {
+    login: ({commit}, data) => {
+      console.log('action found', commit, data)
+    }
+  },
   modules: {}
 });
