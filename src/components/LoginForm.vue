@@ -27,10 +27,10 @@ export default {
         username: this.username,
         password: this.password
       };
-      console.log(this.$store);
-      this.$store.dispatch('login', data)
-        .then(() => this.$router.push('/'))
-        .catch(err => console.log(err))
+      this.$store
+        .dispatch("login", data)
+        .then(() => this.$router.push("/"))
+        .catch(err => console.log(err));
     }
   }
 };
