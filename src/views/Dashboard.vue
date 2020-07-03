@@ -29,7 +29,6 @@ export default {
     }
   },
   mounted() {
-    console.log("juhuu");
     this.fetchMessage();
   }
 };

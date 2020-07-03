@@ -1,16 +1,31 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <span v-if="isAuthenticated">
-        <router-link to="/dashboard">Dashboard</router-link> |
-        <span><a @click.prevent="logout">Logout</a></span>
-      </span>
-      <span v-else>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/login">Login</router-link>
-      </span>
-    </div>
+    <b-navbar toggleable="lg" type="light" variant="light" v-if="isAuthenticated">
+      <b-navbar-brand href="#">
+        <img alt="Vue logo" src="./assets/logo.png" width="32" height="32" />
+      </b-navbar-brand>
+
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-collapse id="nav-collapse" is-nav>
+
+        <b-navbar-nav>
+          <!--
+          <router-link to="/dashboard">Dashboard</router-link> |
+          -->
+        </b-navbar-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown right>
+            <!-- Using 'button-content' slot -->
+            <template v-slot:button-content>
+              <em>User</em>
+            </template>
+            <b-dropdown-item @click.native.prevent="logout">Sign Out</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
     <router-view />
   </div>
 </template>
@@ -19,41 +34,23 @@
 export default {
   computed: {
     isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+      return this.$store.getters["auth/isAuthenticated"];
     }
   },
   methods: {
     logout() {
       console.log("logout");
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push("/")
-      })
+      this.$store.dispatch("auth/logout").then(() => {
+        this.$router.push("/");
+      });
     }
   }
 };
 </script>
 
-
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  text-decoration: underline;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

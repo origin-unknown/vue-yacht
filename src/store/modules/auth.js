@@ -46,7 +46,6 @@ const actions = {
             "Authorization"
           ] = `Bearer ${response.data.access_token}`;
 
-          // router.replace("dashboard");
           resolve(response);
         })
         .catch(error => {
@@ -59,13 +58,12 @@ const actions = {
           localStorage.removeItem("refresh_token");
           delete axios.defaults.headers.common["Authorization"];
 
-          // router.replace("about");
           reject(error);
         })
         .finally(() => {
           console.log("finished api request.");
         });
-     });
+    });
   },
   // register
   // logout
@@ -88,7 +86,7 @@ const getters = {
 };
 
 export default {
-  namespaced: false,
+  namespaced: true,
   state,
   mutations,
   getters,

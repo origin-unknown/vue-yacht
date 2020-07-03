@@ -1,5 +1,7 @@
 <template lang="html">
-  <login-form />
+  <div class="home text-center">
+    <login-form />
+  </div>
 </template>
 
 <script>
