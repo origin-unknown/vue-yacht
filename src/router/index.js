@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import Dashboard from "../views/Dashboard.vue";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -16,31 +18,41 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  },
-  {
-    path: "/sample",
-    name: "Sample",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Sample.vue")
+    component: () => import("../views/About.vue")
   },
   {
     path: "/login",
     name: "Login",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Login.vue")
+    component: () => import("../views/Login.vue")
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
+    },
+    // nested routes for (example: /sample/apps)
+    children: []
+  },
+  // otherwise return home
+  {
+    path: "*",
+    redirect: "/"
   }
 ];
 
 const router = new VueRouter({
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  // check if username is stored in localStorage to prevent routing
+  if (!store.getters.isAuthenticated &&
+      to.matched.some(record => record.meta.requiresAuth)) {
+    return next("/login");
+  }
+  next();
 });
 
 export default router;
