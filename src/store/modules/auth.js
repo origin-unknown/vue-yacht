@@ -1,5 +1,5 @@
 import axios from "axios";
-import router from "@/router";
+// import router from "@/router";
 
 const state = {
   // single source of data
@@ -24,45 +24,48 @@ const mutations = {
 
 const actions = {
   login: ({ commit }, data) => {
-    axios
-      .post("/api/login", {
-        username: data.username,
-        password: data.password
-      })
-      .then(response => {
-        console.log(response.data);
-
-        commit("setAuth", {
+    return new Promise((resolve, reject) => {
+      axios
+        .post("/api/login", {
           username: data.username,
-          access_token: response.data.access_token,
-          refresh_token: response.data.refresh_token
+          password: data.password
+        })
+        .then(response => {
+          console.log(response.data);
+
+          commit("setAuth", {
+            username: data.username,
+            access_token: response.data.access_token,
+            refresh_token: response.data.refresh_token
+          });
+
+          localStorage.setItem("username", data.username);
+          localStorage.setItem("access_token", response.data.access_token);
+          localStorage.setItem("refresh_token", response.data.refresh_token);
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${response.data.access_token}`;
+
+          // router.replace("dashboard");
+          resolve(response);
+        })
+        .catch(error => {
+          console.error(error);
+
+          commit("clearAuth");
+
+          localStorage.removeItem("username");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          delete axios.defaults.headers.common["Authorization"];
+
+          // router.replace("about");
+          reject(error);
+        })
+        .finally(() => {
+          console.log("finished api request.");
         });
-
-        // i think this is unused
-        localStorage.setItem("username", data.username);
-        localStorage.setItem("access_token", response.data.access_token);
-        localStorage.setItem("refresh_token", response.data.refresh_token);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data.access_token}`;
-
-        router.replace("dashboard");
-      })
-      .catch(err => {
-        console.error(err);
-
-        commit("clearAuth");
-
-        localStorage.removeItem("username");
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        delete axios.defaults.headers.common["Authorization"];
-
-        // router.replace("about");
-      })
-      .finally(() => {
-        console.log("finished api request.");
-      });
+     });
   },
   // register
   // logout

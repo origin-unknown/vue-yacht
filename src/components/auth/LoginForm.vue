@@ -29,7 +29,7 @@ export default {
       };
       this.$store
         .dispatch("login", data)
-        .then(() => this.$router.push("/"))
+        .then(() => this.$router.push("/dashboard"))
         .catch(err => console.log(err));
     }
   }
