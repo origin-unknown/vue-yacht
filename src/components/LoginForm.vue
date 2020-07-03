@@ -23,25 +23,11 @@ export default {
   methods: {
     onSubmit() {
       console.log(this.username, this.password);
-      // const url = "/api/login";
-      // this.$http
-      //   .post(url, {
-      //     username: this.username,
-      //     password: this.password
-      //   })
-      //   .then(resp => {
-      //     console.log(resp.data);
-      //   })
-      //   .catch(err => {
-      //     console.error(err);
-      //   })
-      //   .finally(() => {
-      //     console.log("finished api request.");
-      //   });
       let data = {
         username: this.username,
         password: this.password
       };
+      console.log(this.$store);
       this.$store.dispatch('login', data)
         .then(() => this.$router.push('/'))
         .catch(err => console.log(err))
