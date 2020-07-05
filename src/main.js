@@ -11,7 +11,6 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
-
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
 Vue.prototype.$http.interceptors.response.use(
@@ -22,7 +21,7 @@ Vue.prototype.$http.interceptors.response.use(
   error => {
     // handle 401 error here!
     console.log("intercept resp - error", error);
-    if (401 === error.response.status) {
+    if (error.response && error.response.status === 401) {
       store.commit("clearAuth");
       localStorage.removeItem("username");
       localStorage.removeItem("access_token");

@@ -102,5 +102,6 @@ export default {
 }
 #content {
   margin-left: 4rem;
+  padding: 2rem;
 }
 </style>
