@@ -25,6 +25,8 @@
         </div>
         <div>
           <b-nav vertical class="text-left">
+            <b-nav-item to="/dashboard">Dashboard</b-nav-item>
+            <b-nav-item to="/templates">Templates</b-nav-item>
             <b-nav-item @click.prevent="logout">Logout</b-nav-item>
           </b-nav>
         </div>
@@ -51,6 +53,8 @@
           <img alt="Vue logo" src="./assets/logo.png" width="32" height="32" />
         </div>
         <b-nav vertical class="text-left">
+          <b-nav-item to="/dashboard">Dashboard</b-nav-item>
+          <b-nav-item to="/templates">Templates</b-nav-item>
           <b-nav-item @click.prevent="logout">Logout</b-nav-item>
         </b-nav>
       </b-sidebar>

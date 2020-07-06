@@ -2,18 +2,12 @@
   <div>
     <span>{{ message }}</span>
     <hr/>
-    <templates />
   </div>
 </template>
 
 <script>
-import Templates from "@/components/templates/Templates.vue";
-
 export default {
   name: "Dashboard",
-  components: {
-    Templates
-  },
   data() {
     return {
       message: ""

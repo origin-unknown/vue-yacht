@@ -1,6 +1,10 @@
 <template lang="html">
   <div id="templates">
-    <b-table responsive :items="templatesData" :fields="fields"></b-table>
+    <b-table responsive :items="templatesData" :fields="fields">
+      <template v-slot:cell(titleid)="data">
+        <router-link :to="`/templates/${data.item.id}`">{{ data.item.title }}</router-link>
+      </template>
+    </b-table>
   </div>
 </template>
 
@@ -13,22 +17,22 @@ export default {
       // fields to display
       fields: [
         {
-          key: 'title',
+          key: 'titleid',
+          label: 'Title',
           sortable: true,
-        },
-        {
-          key: 'url',
-          sortable: true,
+          tdClass: "text-left"
         },
         {
           key: 'created_at',
           sortable: true,
-          formatter: "fmtDate"
+          formatter: "fmtDate",
+          thClass: "w-25"
         },
         {
           key: 'updated_at',
           sortable: true,
-          formatter: "fmtDate"
+          formatter: "fmtDate",
+          thClass: "w-25"
         }
       ],
       templatesData: []
