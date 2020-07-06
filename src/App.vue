@@ -26,6 +26,7 @@
         <div>
           <b-nav vertical class="text-left">
             <b-nav-item to="/dashboard">Dashboard</b-nav-item>
+            <b-nav-item to="/templates/new">New Template</b-nav-item>
             <b-nav-item to="/templates">Templates</b-nav-item>
             <b-nav-item @click.prevent="logout">Logout</b-nav-item>
           </b-nav>
@@ -54,6 +55,7 @@
         </div>
         <b-nav vertical class="text-left">
           <b-nav-item to="/dashboard">Dashboard</b-nav-item>
+          <b-nav-item to="/templates/new">New Template</b-nav-item>
           <b-nav-item to="/templates">Templates</b-nav-item>
           <b-nav-item @click.prevent="logout">Logout</b-nav-item>
         </b-nav>
@@ -88,8 +90,6 @@ export default {
 
 <style>
 #app {
-  text-align: center;
-  color: #2c3e50;
 }
 
 #sidebar-small {

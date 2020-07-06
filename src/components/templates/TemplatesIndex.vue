@@ -9,9 +9,10 @@
 </template>
 
 <script>
-// import axios from "axios";
+import templateMixin from "@/mixins/templates";
 
 export default {
+  mixins: [templateMixin],
   data() {
     return {
       // fields to display
@@ -20,7 +21,6 @@ export default {
           key: 'titleid',
           label: 'Title',
           sortable: true,
-          tdClass: "text-left"
         },
         {
           key: 'created_at',
@@ -39,21 +39,13 @@ export default {
     }
   },
   methods: {
-    fetchData() {
-      const url = "/api/templates/";
-      this.$http.get(url)
-        .then(response => {
-          this.templatesData = response.data.data;
-        });
-    },
-    // format date to local string
+    /* format date to local string */
     fmtDate(value) {
       return (new Date(Date.parse(value))).toLocaleString();
     }
   },
   mounted() {
-    // load templates from api
-    this.fetchData();
+    this.readTemplates();
   }
 };
 </script>
