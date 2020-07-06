@@ -1,6 +1,6 @@
 <template lang="html">
   <div id="templates">
-    <b-table responsive :items="templatesData" :fields="fields">
+    <b-table responsive :items="templatesData" :fields="fields" :sort-compare="mySortCompare">
       <template v-slot:cell(titleid)="data">
         <router-link :to="`/templates/${data.item.id}`">{{ data.item.title }}</router-link>
       </template>
@@ -42,7 +42,11 @@ export default {
     /* format date to local string */
     fmtDate(value) {
       return (new Date(Date.parse(value))).toLocaleString();
-    }
+    },
+    mySortCompare: function(a, b, key) {
+      key = (key === 'titleid' ? 'title' : key);
+      return a[key].toString().localeCompare(b[key].toString());
+    },
   },
   mounted() {
     this.readTemplates();
