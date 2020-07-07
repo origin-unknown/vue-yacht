@@ -1,6 +1,6 @@
 <template lang="html">
   <div v-if="template">
-    <b-button type="button" @click="removeTemplate">Delete</b-button>
+    <b-button type="button" @click="removeTemplate(template.id)">Delete</b-button>
     <h4>{{ template.title }}</h4>
     <p>{{ template.url }}</p>
   </div>
@@ -8,6 +8,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -25,19 +26,25 @@ export default {
     }
   },
   methods: {
-    removeTemplate() {
-      console.log(this.templateData.id);
-//      this.deleteTemplate(this.templateData.id);
+    ...mapActions({
+      readTemplates: "templates/readTemplates",
+      deleteTemplate: "templates/deleteTemplate"
+    }),
+    removeTemplate(id) {
+      console.log(id);
+      this.deleteTemplate(id);
+      this.$router.push('/templates/');
     }
   },
   mounted() {
-    this.$store.dispatch("templates/loadTemplates");
+    this.readTemplates();
   },
-  // beforeRouterUpdates(to, from, next) {
-  //   const templateId = this.$route.params.templateId;
-  //   this.readTemplate(templateId);
-  //   next();
-  // }
+  beforeRouterUpdates(to, from, next) {
+    this.readTemplates();
+    // const templateId = this.$route.params.templateId;
+    // this.readTemplate(templateId);
+    next();
+  }
 };
 </script>
 

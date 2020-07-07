@@ -5,9 +5,7 @@ import templates from "./modules/templates";
 
 Vue.use(Vuex);
 
-const state = {
-  wuerstchen: 10
-};
+const state = {};
 const mutations = {};
 const actions = {};
 const getters = {};

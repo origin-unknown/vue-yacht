@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -34,10 +35,12 @@ export default {
           thClass: "w-25"
         }
       ],
-      templatesData: []
     }
   },
   methods: {
+    ...mapActions({
+      readTemplates: "templates/readTemplates"
+    }),
     /* format date to local string */
     fmtDate(value) {
       return (new Date(Date.parse(value))).toLocaleString();
@@ -46,14 +49,15 @@ export default {
       key = (key === 'titleid' ? 'title' : key);
       return a[key].toString().localeCompare(b[key].toString());
     },
+
   },
   computed: {
-    ...mapState({
-      templates: "templates/templates"
-    })
+    ...mapState('templates', [
+      "templates"
+    ]),
   },
   mounted() {
-    this.$store.dispatch("templates/loadTemplates");
+    this.readTemplates();
   }
 };
 </script>

@@ -36,10 +36,11 @@
 </template>
 
 <script>
-import templateMixin from "@/mixins/templates";
+// import templateMixin from "@/mixins/templates";
+import { mapActions } from "vuex";
 
 export default {
-  mixins: [templateMixin],
+  // mixins: [templateMixin],
   data() {
     return {
       form: {
@@ -49,9 +50,14 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      writeTemplate: "templates/writeTemplate",
+    }),
+
     onSubmit() {
       const data = { ...this.form };
       this.writeTemplate(data);
+      this.$router.push('/templates/');
       // this.form = {
       //   title: "Untitled Template 2",
       //   url: "http://localhost:8000/static/template.json"
