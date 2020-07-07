@@ -1,11 +1,14 @@
 import axios from "axios";
 
 const state = {
-  templates: []
+  templates: [],
+  wuerstchen: 10
 };
 
 const getters = {
-
+  templateById: (state) => (id) => {
+    return state.templates.find(template => template.id == id);
+  },
 };
 
 const mutations = {

@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -46,9 +48,9 @@ export default {
     },
   },
   computed: {
-    templates() {
-      return this.$store.state.templates.templates;
-    }
+    ...mapState({
+      templates: "templates/templates"
+    })
   },
   mounted() {
     this.$store.dispatch("templates/loadTemplates");

@@ -1,36 +1,43 @@
 <template lang="html">
-  <div v-if="templateData">
+  <div v-if="template">
     <b-button type="button" @click="removeTemplate">Delete</b-button>
-    <h4>{{ templateData.title }}</h4>
-    <p>{{ templateData.url }}</p>
+    <h4>{{ template.title }}</h4>
+    <p>{{ template.url }}</p>
   </div>
 </template>
 
 <script>
-import templateMixin from "@/mixins/templates";
+import { mapGetters } from 'vuex'
 
 export default {
-  mixins: [templateMixin],
   data() {
     return {
       // templateData: null
     };
   },
+  computed: {
+    ...mapGetters({
+      templateById: 'templates/templateById'
+    }),
+    template() {
+      const templateId = this.$route.params.templateId;
+      return this.templateById(templateId);
+    }
+  },
   methods: {
     removeTemplate() {
       console.log(this.templateData.id);
-      this.deleteTemplate(this.templateData.id);
+//      this.deleteTemplate(this.templateData.id);
     }
   },
   mounted() {
-    const templateId = this.$route.params.templateId;
-    this.readTemplate(templateId);
+    this.$store.dispatch("templates/loadTemplates");
   },
-  beforeRouterUpdates(to, from, next) {
-    const templateId = this.$route.params.templateId;
-    this.readTemplate(templateId);
-    next();
-  }
+  // beforeRouterUpdates(to, from, next) {
+  //   const templateId = this.$route.params.templateId;
+  //   this.readTemplate(templateId);
+  //   next();
+  // }
 };
 </script>
 
