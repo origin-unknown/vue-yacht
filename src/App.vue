@@ -92,6 +92,10 @@ export default {
 #app {
 }
 
+.sidebar-header {
+  text-align: center;
+}
+
 #sidebar-small {
   /*
   top: 4rem;

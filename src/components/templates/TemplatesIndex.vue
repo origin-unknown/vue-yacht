@@ -1,6 +1,6 @@
 <template lang="html">
   <div id="templates">
-    <b-table responsive :items="templatesData" :fields="fields" :sort-compare="mySortCompare">
+    <b-table responsive :items="templates" :fields="fields" :sort-compare="mySortCompare">
       <template v-slot:cell(titleid)="data">
         <router-link :to="`/templates/${data.item.id}`">{{ data.item.title }}</router-link>
       </template>
@@ -9,10 +9,7 @@
 </template>
 
 <script>
-import templateMixin from "@/mixins/templates";
-
 export default {
-  mixins: [templateMixin],
   data() {
     return {
       // fields to display
@@ -48,8 +45,13 @@ export default {
       return a[key].toString().localeCompare(b[key].toString());
     },
   },
+  computed: {
+    templates() {
+      return this.$store.state.templates.templates;
+    }
+  },
   mounted() {
-    this.readTemplates();
+    this.$store.dispatch("templates/loadTemplates");
   }
 };
 </script>
