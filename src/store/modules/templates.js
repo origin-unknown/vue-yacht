@@ -3,29 +3,18 @@ import axios from "axios";
 const state = {
   // better use object as set {<id>: template} to guarantee uniqueness
   templates: {},
-  // workaround to prevent BUG in single view
+  // workaround to prevent BUG in singleview
   currentTemplate: null
 };
 
 const getters = {
-  /* BUG: Can't get property of state.templates on readTemplate */
-  // getTemplateById: state => id => {
-  //   return state.templates[id]
-  // },
-  // getTemplateById(state) {
-  //   return id => {
-  //     return state.templates[id];
-  //   }
-  // },
+  // BUG: Can't get property of state.templates on readTemplate(ctx, id)
   getTemplateById(state) {
     return function(id) {
       console.log(state.templates);
       return state.templates[id];
-    }
+    };
   },
-  // getTemplates: state => {
-  //   return Object.values(state.templates);
-  // },
   getTemplates(state) {
     return Object.values(state.templates);
   }
@@ -75,7 +64,13 @@ const actions = {
       commit("setTemplate", template);
     });
   },
-
+  updateTemplate(context, id) {
+    const url = `/api/templates/${id}/refresh`;
+    axios.post(url).then(response => {
+      let template = response.data.data;
+      context.commit("setTemplate", template);
+    });
+  },
   deleteTemplate(context, id) {
     const url = `/api/templates/${id}`;
     axios.delete(url).then(response => {

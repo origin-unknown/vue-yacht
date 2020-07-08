@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
-import { mapState } from 'vuex'
+import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -17,9 +17,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("templates", [
-      "currentTemplate"
-    ]),
+    ...mapState("templates", ["currentTemplate"]),
     ...mapGetters({
       getTemplateById: "templates/getTemplateById"
     }),
@@ -38,7 +36,7 @@ export default {
     removeTemplate(id) {
       // console.log(id);
       this.deleteTemplate(id);
-      this.$router.push('/templates/');
+      this.$router.push("/templates/");
     }
   },
   mounted() {
