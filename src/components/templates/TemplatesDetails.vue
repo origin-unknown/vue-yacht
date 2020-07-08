@@ -1,34 +1,38 @@
 <template lang="html">
-  <div v-if="template">
-    <b-button type="button" @click="removeTemplate(template.id)">Delete</b-button>
-    <h4>{{ template.title }}</h4>
-    <p>{{ template.url }}</p>
+  <div v-if="currentTemplate">
+    <b-button type="button" @click="removeTemplate(currentTemplate.id)">Delete</b-button>
+    <h4>{{ currentTemplate.title }}</h4>
+    <p>{{ currentTemplate.url }}</p>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
-      // templateData: null
     };
   },
   computed: {
+    ...mapState("templates", [
+      "currentTemplate"
+    ]),
     ...mapGetters({
       getTemplateById: "templates/getTemplateById"
     }),
-    template() {
-      const templateId = this.$route.params.templateId;
-      return this.getTemplateById(templateId);
-    }
+    // currently unused, see currentTemplate
+    // template() {
+    //   const templateId = this.$route.params.templateId;
+    //   return this.getTemplateById(templateId);
+    // }
   },
   methods: {
     ...mapActions({
       readTemplate: "templates/readTemplate",
-      readTemplates: "templates/readTemplates",
+      // readTemplates: "templates/readTemplates",
       deleteTemplate: "templates/deleteTemplate"
     }),
     removeTemplate(id) {
@@ -38,20 +42,20 @@ export default {
     }
   },
   mounted() {
-    // BUG:
-    // const templateId = this.$route.params.templateId;
-    // this.readTemplate(templateId);
+    // BUG: getter getTemplateById returns undefined
+    const templateId = this.$route.params.templateId;
+    this.readTemplate(templateId);
 
     // NO BUG:
-    this.readTemplates();
+    // this.readTemplates();
   },
   beforeRouterUpdates(to, from, next) {
-    // BUG:
-    // const templateId = this.$route.params.templateId;
-    // this.readTemplate(templateId);
+    // BUG: getter getTemplateById returns undefined
+    const templateId = this.$route.params.templateId;
+    this.readTemplate(templateId);
 
     // NO BUG:
-    this.readTemplates();
+    // this.readTemplates();
     next();
   }
 };

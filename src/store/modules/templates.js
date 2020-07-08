@@ -2,7 +2,9 @@ import axios from "axios";
 
 const state = {
   // better use object as set {<id>: template} to guarantee uniqueness
-  templates: {}
+  templates: {},
+  // workaround to prevent BUG in single view
+  currentTemplate: null
 };
 
 const getters = {
@@ -17,12 +19,13 @@ const getters = {
   // },
   getTemplateById(state) {
     return function(id) {
+      console.log(state.templates);
       return state.templates[id];
     }
   },
   // getTemplates: state => {
   //   return Object.values(state.templates);
-  // }
+  // },
   getTemplates(state) {
     return Object.values(state.templates);
   }
@@ -40,6 +43,10 @@ const mutations = {
   },
   removeTemplate(state, template) {
     delete state.templates[template.id];
+  },
+  // workaround to prevent BUG in single view
+  setCurrentTemplate(state, template) {
+    state.currentTemplate = template;
   }
 };
 
@@ -55,6 +62,9 @@ const actions = {
     const url = `/api/templates/${id}`;
     axios.get(url).then(response => {
       let template = response.data.data;
+      // workaround to prevent BUG in single view
+      commit("setCurrentTemplate", template);
+      // BUG: getter getTemplateById(id) result undefined
       commit("setTemplate", template);
     });
   },
