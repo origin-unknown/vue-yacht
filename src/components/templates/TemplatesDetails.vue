@@ -18,31 +18,40 @@ export default {
   },
   computed: {
     ...mapGetters({
-      templateById: 'templates/templateById'
+      getTemplateById: "templates/getTemplateById"
     }),
     template() {
       const templateId = this.$route.params.templateId;
-      return this.templateById(templateId);
+      return this.getTemplateById(templateId);
     }
   },
   methods: {
     ...mapActions({
+      readTemplate: "templates/readTemplate",
       readTemplates: "templates/readTemplates",
       deleteTemplate: "templates/deleteTemplate"
     }),
     removeTemplate(id) {
-      console.log(id);
+      // console.log(id);
       this.deleteTemplate(id);
       this.$router.push('/templates/');
     }
   },
   mounted() {
+    // BUG:
+    // const templateId = this.$route.params.templateId;
+    // this.readTemplate(templateId);
+
+    // NO BUG:
     this.readTemplates();
   },
   beforeRouterUpdates(to, from, next) {
-    this.readTemplates();
+    // BUG:
     // const templateId = this.$route.params.templateId;
     // this.readTemplate(templateId);
+
+    // NO BUG:
+    this.readTemplates();
     next();
   }
 };

@@ -1,6 +1,6 @@
 <template lang="html">
   <div id="templates">
-    <b-table responsive :items="templates" :fields="fields" :sort-compare="mySortCompare">
+    <b-table responsive :items="getTemplates" :fields="fields" :sort-compare="mySortCompare">
       <template v-slot:cell(titleid)="data">
         <router-link :to="`/templates/${data.item.id}`">{{ data.item.title }}</router-link>
       </template>
@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 
 export default {
@@ -52,9 +53,12 @@ export default {
 
   },
   computed: {
-    ...mapState('templates', [
-      "templates"
-    ]),
+    // ...mapState('templates', [
+    //   "templates"
+    // ]),
+    ...mapGetters({
+      getTemplates: 'templates/getTemplates'
+    }),
   },
   mounted() {
     this.readTemplates();

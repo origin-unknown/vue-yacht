@@ -2,26 +2,44 @@ import axios from "axios";
 
 const state = {
   // better use object as set {<id>: template} to guarantee uniqueness
-  templates: []
+  templates: {}
 };
 
 const getters = {
-  templateById: state => id => {
-    return state.templates.find(template => template.id == id);
+  /* BUG: Can't get property of state.templates on readTemplate */
+  // getTemplateById: state => id => {
+  //   return state.templates[id]
+  // },
+  // getTemplateById(state) {
+  //   return id => {
+  //     return state.templates[id];
+  //   }
+  // },
+  getTemplateById(state) {
+    return function(id) {
+      return state.templates[id];
+    }
+  },
+  // getTemplates: state => {
+  //   return Object.values(state.templates);
+  // }
+  getTemplates(state) {
+    return Object.values(state.templates);
   }
 };
 
 const mutations = {
   setTemplates(state, templates) {
-    state.templates = templates;
+    state.templates = templates.reduce((map, obj) => {
+      map[obj.id] = obj;
+      return map;
+    }, {});
   },
-  addTemplate(state, template) {
-    state.templates.push(template);
+  setTemplate(state, template) {
+    state.templates[template.id] = template;
   },
   removeTemplate(state, template) {
-    state.templates = state.templates.filter(
-      _template => _template.id == template.id
-    );
+    delete state.templates[template.id];
   }
 };
 
@@ -33,17 +51,18 @@ const actions = {
       commit("setTemplates", templates);
     });
   },
-  // readTemplate(context, id) {
-  //   const url = `/api/templates/${id}`;
-  //   axios.get(url).then(response => {
-  //     let template = response.data.data;
-  //   });
-  // },
+  readTemplate({ commit }, id) {
+    const url = `/api/templates/${id}`;
+    axios.get(url).then(response => {
+      let template = response.data.data;
+      commit("setTemplate", template);
+    });
+  },
   writeTemplate({ commit }, payload) {
     const url = "/api/templates/";
     axios.post(url, payload).then(response => {
       let template = response.data.data;
-      commit("addTemplate", template);
+      commit("setTemplate", template);
     });
   },
 
