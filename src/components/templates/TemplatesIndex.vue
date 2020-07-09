@@ -37,6 +37,8 @@
 
     <hr/>
 
+    <b-form-input v-model="filter" placeholder="Type to Search"></b-form-input>
+
     <b-table
       responsive
       fixed
@@ -48,6 +50,10 @@
       borderless
       :items="templates"
       :fields="fields"
+      :filter="filter"
+      :filter-included-fields="['title']"
+      :per-page="perPage"
+      :current-page="currentPage"
       @row-clicked="templateDetails"
     >
       <template v-slot:cell(title)="data">
@@ -126,6 +132,13 @@
 
     </b-table>
 
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="templates.length"
+      :per-page="perPage"
+      aria-controls="my-table"
+    ></b-pagination>
+
     <!-- title="Delete Template" -->
     <b-modal
       v-if="selectedTemplate"
@@ -156,6 +169,9 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
+      filter: null,
+      perPage: 5,
+      currentPage: 1,
       // fields to display
       fields: [
         {
