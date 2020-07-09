@@ -1,40 +1,5 @@
 <template lang="html">
   <div id="templates">
-
-    <b-form ref="form" @submit.prevent="onSubmit">
-      <b-form-group
-        label="Title:"
-        label-for="title"
-        description="The title of the template.">
-        <b-form-input
-          id="title"
-          v-model="form.title"
-          type="text"
-          placeholder="Untitled Template"
-          required
-          >
-        </b-form-input>
-      </b-form-group>
-
-      <b-form-group
-        label="URL:"
-        label-for="url"
-        description="The URL of the template.">
-        <b-form-input
-          id="title"
-          v-model="form.url"
-          type="url"
-          placeholder="http://localhost/path/to/template.json"
-          required
-          >
-        </b-form-input>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-    </b-form>
-
-    <hr/>
-
     <b-table
       responsive
       fixed
@@ -44,7 +9,7 @@
       hover
       outlined
       borderless
-      :items="templates"
+      :items="getTemplates"
       :fields="fields"
       @row-clicked="templateDetails"
     >
@@ -73,7 +38,7 @@
           >
             <b-card bg-variant="light" no-body>
               <b-button
-                @click="updateTemplate(data.item.id)"
+                @click="refreshTemplate(data.item.id)"
                 squared
                 class="d-flex px-4 align-items-center"
                 title="Update Template"
@@ -110,7 +75,7 @@
       ok-variant="danger"
       hide-backdrop
       content-class="shadow"
-      @ok="deleteTemplate(selectedTemplate.id)"
+      @ok="removeTemplate(selectedTemplate.id)"
     >
       <p>
         Deleting this template will remove the ability to lauch all apps defined
@@ -123,8 +88,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-// import { mapGetters } from "vuex";
+// import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 
 export default {
@@ -140,7 +105,7 @@ export default {
         {
           key: "created_at",
           sortable: true,
-          formatter: "formarDate",
+          formatter: "fmtDate",
           thClass: "w-25"
         },
         {
@@ -156,44 +121,51 @@ export default {
           headerTitle: "Update Buttons"
         }
       ],
-      form: {
-        title: "Untitled Template 1",
-        url: "http://localhost:5000/static/template.json"
-      },
       selectedTemplate: null
-
     };
   },
   methods: {
     ...mapActions({
       readTemplates: "templates/readTemplates",
       updateTemplate: "templates/updateTemplate",
-      deleteTemplate: "templates/deleteTemplate",
-      writeTemplate: "templates/writeTemplate"
+      deleteTemplate: "templates/deleteTemplate"
     }),
     /* format date to local string */
     fmtDate(value) {
       return new Date(Date.parse(value)).toLocaleString();
     },
+    // mySortCompare: function(a, b, key) {
+    //   key = key === "titleid" ? "title" : key;
+    //   return a[key].toString().localeCompare(b[key].toString());
+    // },
     templateDetails(template) {
       this.$router.push({ path: `/templates/${template.id}` });
     },
-    onSubmit() {
-      const data = { ...this.form };
-      this.writeTemplate(data);
-      this.$refs.form.reset();
+    refreshTemplate(id) {
+      this.updateTemplate(id);
+      this.readTemplates();
+    },
+    /* deleteSelectedTemplate */
+    removeTemplate(id) {
+      this.deleteTemplate(id);
+      // this.readTemplates();
     }
   },
   computed: {
-    ...mapState("templates", ["templates"])
+    ...mapGetters({
+      getTemplates: "templates/getTemplates"
+    })
   },
   mounted() {
     this.readTemplates();
   },
   watch: {
-    templates: (oldval, newval) => {
-      console.log(oldval, newval);
+    getTemplates() {
+      console.log('items updated');
     }
+    // '$store.state.templates.templates': function() {
+    //   // this.readTemplates();
+    // }
   }
 };
 </script>

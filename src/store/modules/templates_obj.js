@@ -2,7 +2,7 @@ import axios from "axios";
 
 const state = {
   // better use object as set {<id>: template} to guarantee uniqueness
-  templates: [],
+  templates: {},
   // workaround to prevent BUG in singleview
   currentTemplate: null
 };
@@ -11,26 +11,27 @@ const getters = {
   // BUG: Can't get property of state.templates on readTemplate(ctx, id)
   getTemplateById(state) {
     return id => {
-      return state.templates.find(x => x.id == id);
+      console.log(state.templates);
+      return state.templates[id];
     };
+  },
+  getTemplates(state) {
+    return Object.values(state.templates);
   }
 };
 
 const mutations = {
   setTemplates(state, templates) {
-    state.templates = templates
+    state.templates = templates.reduce((map, obj) => {
+      map[obj.id] = obj;
+      return map;
+    }, {});
   },
   setTemplate(state, template) {
-    const idx = state.templates.findIndex(x => x.id === template.id);
-    state.templates.splice(idx, 1, template);
-  },
-  addTemplate(state, template) {
-    state.templates.push(template);
+    state.templates[template.id] = template;
   },
   removeTemplate(state, template) {
-    const idx = state.templates.findIndex(x => x.id === template.id);
-    state.templates.splice(idx, 1);
-    console.log(state.templates);
+    delete state.templates[template.id];
   },
   // workaround to prevent BUG in single view
   setCurrentTemplate(state, template) {
@@ -60,7 +61,7 @@ const actions = {
     const url = "/api/templates/";
     axios.post(url, payload).then(response => {
       let template = response.data.data;
-      commit("addTemplate", template);
+      commit("setTemplate", template);
     });
   },
   updateTemplate(context, id) {
