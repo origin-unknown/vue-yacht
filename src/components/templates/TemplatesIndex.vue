@@ -5,28 +5,30 @@
       <b-form-group
         label="Title:"
         label-for="title"
-        description="The title of the template.">
+        description="The title of the template."
+      >
         <b-form-input
           id="title"
           v-model="form.title"
           type="text"
           placeholder="Untitled Template"
           required
-          >
+        >
         </b-form-input>
       </b-form-group>
 
       <b-form-group
         label="URL:"
         label-for="url"
-        description="The URL of the template.">
+        description="The URL of the template."
+      >
         <b-form-input
           id="title"
           v-model="form.url"
           type="url"
           placeholder="http://localhost/path/to/template.json"
           required
-          >
+        >
         </b-form-input>
       </b-form-group>
 
@@ -49,9 +51,32 @@
       @row-clicked="templateDetails"
     >
       <template v-slot:cell(title)="data">
-        <router-link :to="`/templates/${data.item.id}`">
-          {{ data.item.title }}
-        </router-link>
+        <div class="namecell">
+          <span class="nametext">
+            <router-link :to="`/templates/${data.item.id}`">
+              {{ data.item.title }}
+            </router-link>
+          </span>
+          <b-dropdown
+            variant="link"
+            size="sm"
+            right
+            style="display:inline-block;"
+          >
+            <template slot="button-content">
+              <b-icon-three-dots class="ml-auto" />
+            </template>
+            <b-dropdown-item @click="updateTemplate(data.item.id)">
+              <b-icon-arrow-repeat class="ml-auto" /> Update
+            </b-dropdown-item>
+            <b-dropdown-item
+              v-b-modal="'modal-delete'"
+              @click="selectedTemplate = data.item"
+            >
+              <b-icon-trash class="ml-auto" /> Delete
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
       </template>
 
       <template v-slot:cell(update_now)="data">
@@ -102,7 +127,8 @@
     </b-table>
 
     <!-- title="Delete Template" -->
-    <b-modal v-if="selectedTemplate"
+    <b-modal
+      v-if="selectedTemplate"
       id="modal-delete"
       :title="`Delete Template: &quot;${selectedTemplate.title}&quot;`"
       header-bg-variant="dark"
@@ -140,21 +166,22 @@ export default {
         {
           key: "created_at",
           sortable: true,
-          formatter: "formarDate",
-          thClass: "w-25"
+          formatter: "fmtDate",
+          thClass: "w-20"
         },
         {
           key: "updated_at",
           sortable: true,
           formatter: "fmtDate",
-          thClass: "w-25"
+          thClass: "w-20"
         },
-        {
-          key: "update_now",
-          sortable: false,
-          label: "",
-          headerTitle: "Update Buttons"
-        }
+        // {
+        //   key: "update_now",
+        //   sortable: false,
+        //   label: "",
+        //   headerTitle: "Update Buttons",
+        //   thClass: "w-20"
+        // }
       ],
       form: {
         title: "Untitled Template 1",
@@ -198,4 +225,24 @@ export default {
 };
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css">
+
+.w-20 {
+  width: 20% !important;
+}
+
+.namecell {
+  display: flex;
+  min-width: 72px;
+}
+.nametext {
+  width: 0;
+  padding: 0px;
+  padding-right: 20px;
+  flex-grow: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+</style>
