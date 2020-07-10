@@ -1,13 +1,19 @@
 <template lang="html">
   <div id="templates">
     <div class="d-flex">
-      <b-form-input v-model="filter" placeholder="Type to Search" class="mr-2">
+      <b-form-select
+        v-model="perPage"
+        :options="['5', '10', '20']"
+        class="mr-2 mb-1"
+        style="width:4rem;"
+      ></b-form-select>
+      <b-form-input v-model="filter" placeholder="Search" class="mr-2 mb-1">
       </b-form-input>
       <b-button
         squared
         v-b-modal="'modal-add'"
         title="Add Template"
-        class="ml-auto mb-1"
+        class="mb-1"
         variant="dark"
       >
         <b-icon-plus />
@@ -225,6 +231,9 @@ export default {
 </script>
 
 <style lang="css">
+.w-10 {
+  width: 10% !important;
+}
 .w-20 {
   width: 20% !important;
 }
