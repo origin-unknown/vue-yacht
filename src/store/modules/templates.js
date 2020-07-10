@@ -47,7 +47,8 @@ const actions = {
     commit("setLoading", true);
     const url = "/api/templates/";
     axios
-      .get(url).then(response => {
+      .get(url)
+      .then(response => {
         let templates = response.data.data;
         commit("setTemplates", templates);
       })
@@ -58,7 +59,8 @@ const actions = {
   readTemplate({ commit }, id) {
     const url = `/api/templates/${id}`;
     commit("setLoading", true);
-    axios.get(url)
+    axios
+      .get(url)
       .then(response => {
         let template = response.data.data;
         // workaround to prevent BUG in single view
@@ -73,7 +75,8 @@ const actions = {
   writeTemplate({ commit }, payload) {
     const url = "/api/templates/";
     commit("setLoading", true);
-    axios.post(url, payload)
+    axios
+      .post(url, payload)
       .then(response => {
         let template = response.data.data;
         commit("addTemplate", template);
@@ -85,11 +88,12 @@ const actions = {
   updateTemplate({ commit }, id) {
     const url = `/api/templates/${id}/refresh`;
     commit("setLoading", true);
-    axios.post(url)
+    axios
+      .post(url)
       .then(response => {
-          let template = response.data.data;
-          commit("setTemplate", template);
-        })
+        let template = response.data.data;
+        commit("setTemplate", template);
+      })
       .finally(() => {
         commit("setLoading", false);
       });
@@ -97,7 +101,8 @@ const actions = {
   deleteTemplate({ commit }, id) {
     const url = `/api/templates/${id}`;
     commit("setLoading", true);
-    axios.delete(url)
+    axios
+      .delete(url)
       .then(response => {
         let template = response.data.data;
         commit("removeTemplate", template);

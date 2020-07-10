@@ -1,6 +1,8 @@
 <template lang="html">
   <div v-if="currentTemplate">
-    <b-button type="button" @click="removeTemplate(currentTemplate.id)">Delete</b-button>
+    <b-button type="button" @click="removeTemplate(currentTemplate.id)"
+      >Delete
+    </b-button>
     <h4>{{ currentTemplate.title }}</h4>
     <p>{{ currentTemplate.url }}</p>
   </div>
@@ -13,14 +15,13 @@ import { mapState } from "vuex";
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     ...mapState("templates", ["currentTemplate"]),
     ...mapGetters({
       getTemplateById: "templates/getTemplateById"
-    }),
+    })
     // currently unused, see currentTemplate
     // template() {
     //   const templateId = this.$route.params.templateId;
@@ -59,5 +60,4 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
-</style>
+<style lang="css" scoped></style>

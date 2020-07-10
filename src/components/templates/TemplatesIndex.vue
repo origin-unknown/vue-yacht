@@ -1,44 +1,18 @@
 <template lang="html">
   <div id="templates">
-    <b-overlay :show="loading" variant="white" rounded="sm">
-
-    <b-form ref="form" @submit.prevent="onSubmit">
-      <b-form-group
-        label="Title:"
-        label-for="title"
-        description="The title of the template."
+    <div class="d-flex">
+      <b-form-input v-model="filter" placeholder="Type to Search" class="mr-2">
+      </b-form-input>
+      <b-button
+        squared
+        v-b-modal="'modal-add'"
+        title="Add Template"
+        class="ml-auto mb-1"
+        variant="dark"
       >
-        <b-form-input
-          id="title"
-          v-model="form.title"
-          type="text"
-          placeholder="Untitled Template"
-          required
-        >
-        </b-form-input>
-      </b-form-group>
-
-      <b-form-group
-        label="URL:"
-        label-for="url"
-        description="The URL of the template."
-      >
-        <b-form-input
-          id="title"
-          v-model="form.url"
-          type="url"
-          placeholder="http://localhost/path/to/template.json"
-          required
-        >
-        </b-form-input>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-    </b-form>
-
-    <hr/>
-
-    <b-form-input v-model="filter" placeholder="Type to Search"></b-form-input>
+        <b-icon-plus />
+      </b-button>
+    </div>
 
     <b-table
       responsive
@@ -85,53 +59,6 @@
           </b-dropdown>
         </div>
       </template>
-
-<!--
-      <template v-slot:cell(update_now)="data">
-        <div>
-          <b-button
-            squared
-            block
-            v-b-toggle="'collapse-actions' + data.item.id"
-            title="Actions"
-            class="m-1"
-            variant="dark"
-          >
-            Actions
-            <b-icon-chevron-down />
-          </b-button>
-          <b-collapse
-            :id="'collapse-actions' + data.item.id"
-            accordion="template-actions"
-          >
-            <b-card bg-variant="light" no-body>
-              <b-button
-                @click="updateTemplate(data.item.id)"
-                squared
-                class="d-flex px-4 align-items-center"
-                title="Update Template"
-                variant="light"
-              >
-                Update
-                <b-icon-arrow-repeat class="ml-auto" />
-              </b-button>
-              <b-button
-                v-b-modal="'modal-delete'"
-                squared
-                class="d-flex px-4 align-items-center"
-                title="Remove Template"
-                variant="light"
-                @click="selectedTemplate = data.item"
-              >
-                Delete
-                <b-icon-trash class="ml-auto" />
-              </b-button>
-
-            </b-card>
-          </b-collapse>
-        </div>
-      </template>
--->
     </b-table>
 
     <b-pagination
@@ -159,8 +86,64 @@
       </p>
     </b-modal>
 
-    </b-overlay>
+    <b-modal
+      :id="'modal-add'"
+      :title="'Add Template'"
+      header-bg-variant="dark"
+      header-text-variant="light"
+      hide-backdrop
+      content-class="shadow"
+    >
+      <!-- Modal Footer -->
+      <template slot="modal-footer" slot-scope="{ ok, cancel }">
+        <div class="d-flex">
+          <b-button @click="cancel" variant="dark"> Cancel </b-button>
+          <b-button
+            @click="
+              ok();
+              addTemplate();
+            "
+            variant="primary"
+            class=" ml-2 "
+          >
+            Add
+            <b-icon-plus />
+          </b-button>
+        </div>
+      </template>
+      <!-- Modal Content -->
+      <b-form>
+        <b-form-group
+          label="Title:"
+          label-for="title"
+          description="The title of the template."
+        >
+          <b-form-input
+            id="title"
+            v-model="form.title"
+            type="text"
+            placeholder="Template Name"
+            required
+          >
+          </b-form-input>
+        </b-form-group>
 
+        <b-form-group
+          label="URL:"
+          label-for="url"
+          description="The URL of the template."
+        >
+          <b-form-input
+            id="title"
+            v-model="form.url"
+            type="url"
+            placeholder="http://example.com/path/to/template.json"
+            required
+          >
+          </b-form-input>
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
@@ -193,21 +176,13 @@ export default {
           sortable: true,
           formatter: "fmtDate",
           thClass: "w-20"
-        },
-        // {
-        //   key: "update_now",
-        //   sortable: false,
-        //   label: "",
-        //   headerTitle: "Update Buttons",
-        //   thClass: "w-20"
-        // }
+        }
       ],
       form: {
         title: "Untitled Template 1",
         url: "http://localhost:5000/static/template.json"
       },
       selectedTemplate: null
-
     };
   },
   methods: {
@@ -228,10 +203,15 @@ export default {
       const data = { ...this.form };
       this.writeTemplate(data);
       this.$refs.form.reset();
+    },
+    addTemplate() {
+      const data = { ...this.form };
+      this.writeTemplate(data);
+      this.$refs.form.reset();
     }
   },
   computed: {
-    ...mapState("templates", ["templates", "loading"]),
+    ...mapState("templates", ["templates"])
   },
   mounted() {
     this.readTemplates();
@@ -245,11 +225,9 @@ export default {
 </script>
 
 <style lang="css">
-
 .w-20 {
   width: 20% !important;
 }
-
 .namecell {
   display: flex;
   min-width: 72px;
@@ -263,5 +241,4 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-
 </style>
