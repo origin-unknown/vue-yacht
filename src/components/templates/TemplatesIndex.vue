@@ -1,5 +1,6 @@
 <template lang="html">
   <div id="templates">
+    <b-overlay :show="loading" variant="white" rounded="sm">
 
     <b-form ref="form" @submit.prevent="onSubmit">
       <b-form-group
@@ -85,6 +86,7 @@
         </div>
       </template>
 
+<!--
       <template v-slot:cell(update_now)="data">
         <div>
           <b-button
@@ -129,7 +131,7 @@
           </b-collapse>
         </div>
       </template>
-
+-->
     </b-table>
 
     <b-pagination
@@ -139,7 +141,6 @@
       aria-controls="my-table"
     ></b-pagination>
 
-    <!-- title="Delete Template" -->
     <b-modal
       v-if="selectedTemplate"
       id="modal-delete"
@@ -157,6 +158,8 @@
         (this will have no effect on running apps)
       </p>
     </b-modal>
+
+    </b-overlay>
 
   </div>
 </template>
@@ -228,15 +231,15 @@ export default {
     }
   },
   computed: {
-    ...mapState("templates", ["templates"])
+    ...mapState("templates", ["templates", "loading"]),
   },
   mounted() {
     this.readTemplates();
   },
   watch: {
-    templates: (oldval, newval) => {
-      console.log(oldval, newval);
-    }
+    // templates: (oldval, newval) => {
+    //   console.log(oldval, newval);
+    // }
   }
 };
 </script>
