@@ -2,14 +2,12 @@ import axios from "axios";
 
 const state = {
   loading: false,
-  // better use object as set {<id>: template} to guarantee uniqueness
   templates: [],
   // workaround to prevent BUG in singleview
   currentTemplate: null
 };
 
 const getters = {
-  // BUG: Can't get property of state.templates on readTemplate(ctx, id)
   getTemplateById(state) {
     return id => {
       return state.templates.find(x => x.id == id);
@@ -34,7 +32,6 @@ const mutations = {
   removeTemplate(state, template) {
     const idx = state.templates.findIndex(x => x.id === template.id);
     state.templates.splice(idx, 1);
-    console.log(state.templates);
   },
   // workaround to prevent BUG in single view
   setCurrentTemplate(state, template) {

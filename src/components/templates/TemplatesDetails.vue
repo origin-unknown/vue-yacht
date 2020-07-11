@@ -1,10 +1,29 @@
 <template lang="html">
   <div v-if="currentTemplate">
-    <b-button type="button" @click="removeTemplate(currentTemplate.id)"
-      >Delete
-    </b-button>
     <h4>{{ currentTemplate.title }}</h4>
     <p>{{ currentTemplate.url }}</p>
+
+    <b-container fluid>
+      <b-row cols="1">
+        <b-col
+          v-for="item in currentTemplate.items"
+          :key="item.id"
+          col
+          no-gutters
+          class="mb-2"
+        >
+          <b-media>
+            <template v-slot:aside>
+              <img :src="item.logo" width="64" alt="Media Aside" />
+            </template>
+
+            <h2 class="mt-0">{{ item.title }}</h2>
+            <p>{{ item.description }}</p>
+          </b-media>
+          <hr />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -22,39 +41,24 @@ export default {
     ...mapGetters({
       getTemplateById: "templates/getTemplateById"
     })
-    // currently unused, see currentTemplate
-    // template() {
-    //   const templateId = this.$route.params.templateId;
-    //   return this.getTemplateById(templateId);
-    // }
   },
   methods: {
     ...mapActions({
       readTemplate: "templates/readTemplate",
-      // readTemplates: "templates/readTemplates",
       deleteTemplate: "templates/deleteTemplate"
     }),
     removeTemplate(id) {
-      // console.log(id);
       this.deleteTemplate(id);
       this.$router.push("/templates/");
     }
   },
   mounted() {
-    // BUG: getter getTemplateById returns undefined
     const templateId = this.$route.params.templateId;
     this.readTemplate(templateId);
-
-    // NO BUG:
-    // this.readTemplates();
   },
   beforeRouterUpdates(to, from, next) {
-    // BUG: getter getTemplateById returns undefined
     const templateId = this.$route.params.templateId;
     this.readTemplate(templateId);
-
-    // NO BUG:
-    // this.readTemplates();
     next();
   }
 };

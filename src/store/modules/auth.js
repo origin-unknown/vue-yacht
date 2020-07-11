@@ -42,6 +42,9 @@ const getters = {
 
 const mutations = {
   // isolated data mutations
+  setAccessToken(state, token) {
+    state.accessToken = token;
+  },
   setAuth(state, data) {
     state.username = data.username;
     state.accessToken = data.access_token;
@@ -125,11 +128,22 @@ const actions = {
     });
   },
   // register() {},
-  refreshTokens() {
-    // TODO
-  },
-  autoRefresh() {
-    // TODO perhaps moe to app
+  refresh({ state }) {
+    const url = "/api/refresh";
+    const payload = {};
+    const headers = {
+      "Authorization": `Bearer ${state.refreshToken}`
+    }
+    axios
+      .post(url, payload, { headers: headers })
+      .then(response => {
+        // console.log("?>", state.accessToken);
+        const accessToken = response.data.access_token;
+        state.accessToken = accessToken;
+        localStorage.setItem("access_token", accessToken);
+        // commit("setAccessToken", accessToken);
+        // console.log("?>", state.accessToken);
+      })
   }
 };
 

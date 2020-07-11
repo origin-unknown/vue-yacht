@@ -69,21 +69,56 @@
 </template>
 
 <script type="text/javascript">
+import { mapActions, mapGetters } from "vuex";
+
 export default {
+  data() {
+    return {
+      timeout: null
+    };
+  },
   computed: {
-    isAuthenticated() {
-      return this.$store.getters["auth/isAuthenticated"];
-    }
+    ...mapGetters({
+      isAuthenticated: "auth/isAuthenticated"
+    }),
+    // isAuthenticated() {
+    //   return this.$store.getters["auth/isAuthenticated"];
+    // }
   },
   methods: {
-    logout() {
-      console.log("logout");
-      this.$store.dispatch("auth/logout").then(() => {
-        this.$router.push("/");
-      });
-    }
+    ...mapActions({
+      login: "auth/login",
+      logout: "auth/logout",
+      refreshToken: "auth/refresh"
+    }),
+    // logout() {
+    //   console.log("logout");
+    //   this.$store.dispatch("auth/logout").then(() => {
+    //     this.$router.push("/");
+    //   });
+    // }
+  },
+  beforeCreate() {
+    // console.log("beforeCreate");
+    // this.$store.dispatch("auth/refreshToken");
   },
   created() {
+    // console.log("created");
+    this.timeout = setInterval(() => {
+      if (this.isAuthenticated) {
+        this.refreshToken();
+      } else {
+        clearTimeout(this.timeout);
+        this.$router.push("/");
+      }
+      // this.$store.dispatch("auth/refresh");
+    }, 1000); // *60*14);
+  },
+  beforeDestroy() {
+    // console.log("beforeDestroy");
+  },
+  destroyed() {
+    clearTimeout(this.timeout);
   }
 };
 </script>
