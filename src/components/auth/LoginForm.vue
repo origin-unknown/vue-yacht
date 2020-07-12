@@ -1,17 +1,42 @@
 <template lang="html">
-  <b-form @submit.prevent="onSubmit" class="form-signin mt-5">
+  <b-form
+    ref="form"
+    @submit.prevent="onSubmit"
+    class="form-signin mt-5 text-center"
+  >
     <!-- add validation for required to both fields -->
-    <img class="mb-4" alt="Vue logo" src="../../assets/logo.png" width="72" height="72"/>
+    <img
+      class="mb-4"
+      alt="Vue logo"
+      src="../../assets/logo.png"
+      width="72"
+      height="72"
+    />
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="username" class="sr-only">Username</label>
-    <b-input id="username" class="form-control" v-model="username" type="text" placeholder="Username" autofocus/>
+    <b-input
+      id="username"
+      class="form-control"
+      v-model="username"
+      type="text"
+      placeholder="Username"
+      autofocus
+    />
     <label for="password" class="sr-only">Password</label>
-    <b-input id="password" class="form-control" v-model="password" type="password" placeholder="Password" />
+    <b-input
+      id="password"
+      class="form-control"
+      v-model="password"
+      type="password"
+      placeholder="Password"
+    />
     <b-button type="submit" variant="primary" size="lg" block>Sign in</b-button>
   </b-form>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -20,22 +45,22 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      login: "auth/login"
+    }),
     onSubmit() {
-      let data = {
+      this.login({
         username: this.username,
         password: this.password
-      };
-      this.$store
-        .dispatch("auth/login", data)
-        .then(() => this.$router.push("dashboard"))
-        .catch(err => console.log(err));
+      });
+      this.password = "";
+      // this.$refs.form.reset();
     }
   }
 };
 </script>
 
 <style lang="css" scope>
-
 .form-signin {
   width: 100%;
   max-width: 330px;
